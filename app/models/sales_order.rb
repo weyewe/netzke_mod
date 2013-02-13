@@ -15,11 +15,46 @@ class SalesOrder < ActiveRecord::Base
   end
   
   def delete_or_destroy
+    
     if self.is_confirmed?
       self.is_deleted = true
       self.save
+      self.sales_items.each do |si|
+        si.delete_or_destroy
+      end
     else
       self.destroy 
+    end
+  end
+  
+  def recover
+    if self.is_deleted?
+      self.is_deleted = false 
+      self.save
+      self.sales_items.each do |si|
+        si.is_deleted = false
+        si.save 
+      end
+    end
+  end
+  
+  def confirm
+    if self.is_confirmed == true 
+      errors.add(:is_confirmed , "Sudah konfirmasi" )  
+      return self 
+    end
+    
+    if self.sales_items.count == 0 
+      errors.add(:sales_item , "Harus setidaknya ada 1 sales item" )  
+      return self
+    end
+    
+    self.is_confirmed = true
+    self.save 
+    
+    self.sales_items.each do |si|
+      si.is_confirmed = true
+      si.save 
     end
   end
 end

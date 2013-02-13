@@ -30,7 +30,6 @@ private
   # 
   #   @record = data_class.new if @record.nil?
   # 
-  #   Customer.
   #   hsh.each_pair do |k,v|
   #     # ok, maybe we extend this part of the form. The netzke_submit endpoint is good.
   #     # in the create_or_update_record, we decide whether it is 

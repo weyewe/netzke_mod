@@ -2,6 +2,10 @@ class SalesOrdersSalesItems < Netzke::Base
   # Remember regions collapse state and size
   include Netzke::Basepack::ItemPersistence
 
+# clone this guy
+# http://doug.everly.org/category/webdev/
+
+
   def configure(c)
     super
     c.items = [
@@ -18,16 +22,50 @@ class SalesOrdersSalesItems < Netzke::Base
     c.init_component = <<-JS
       function(){
         // calling superclass's initComponent
+        
+        
+        
+        console.log("callParent");
         this.callParent();
+        
+        console.log("setup relayEvents")
+        var view = this.getComponent('sales_orders').getView();
+        // this.relayEvents(view, ['salesorderdelete']);
 
         // setting the 'rowclick' event
-        var view = this.getComponent('sales_orders').getView();
+        
+        console.log("respond to itemclick");
         view.on('itemclick', function(view, record){
           // The beauty of using Ext.Direct: calling 3 endpoints in a row, which results in a single call to the server!
           this.selectSalesOrder({sales_order_id: record.get('id')});
           this.getComponent("sales_items").setTitle( "SalesItems dari Sales Order: " + record.get("code"));
           this.getComponent('sales_items').getStore().load(); 
         }, this);
+      
+      
+        console.log("respond to custom events");
+        
+        view.on("salesorderdelete", function(){ console.log("awesome callback"); }, this);
+        
+        
+       // this.on({
+       //   'salesorderdelete': function(x, obj){
+       //     console.log("in the sales order delete @sales_orders_sales_items");
+       //   }
+       // });
+        
+        console.log("done initComponent");
+        
+        
+        
+    
+        
+        // var sales_items_view = this.getComponent('sales_items').getView();
+        // this.relayEvents(view, ['sales_order_delete']);
+        
+        this.on("sales_order_delete", function(){
+          console.log("sales_orders_sales_items receive relayEvents ");
+        });
       }
     JS
   end

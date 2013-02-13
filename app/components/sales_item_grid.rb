@@ -28,16 +28,16 @@ class SalesItemGrid < Netzke::Basepack::Grid
       {
         name:  :code,
         flex: 1 
-      }, 
-      { :name => :status,
-        :width => 150,
-        :header => "Status",
-        :tooltip => "Recently updated",
-        :getter => lambda { |r|
-          bulb = r.is_confirmed ? "CONFIRM" : "PENDING"
-          "<div>#{bulb}</div>"
-        }
-      }
+      }# , 
+      #       { :name => :status,
+      #         :width => 150,
+      #         :header => "Status",
+      #         :tooltip => "Recently updated",
+      #         :getter => lambda { |r|
+      #           bulb = r.is_confirmed ? "CONFIRM" : "PENDING"
+      #           "<div>#{bulb}</div>"
+      #         }
+      #       }
     ]
   end
   
